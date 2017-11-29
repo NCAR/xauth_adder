@@ -82,6 +82,7 @@ int main()
     
     while (getline(&ln,&ln_len,fptr)!=-1) {
         buffer_str += ln;
+        buffer_str += " ";
         free(ln);
         ln_len=0;
     }
@@ -110,14 +111,22 @@ int main()
         }
         ++iter;
     }
+    std::cerr << "key = " << key << std::endl;
     std::string comm = "xauth add ";
     comm += host;
     comm += ".ucar.edu:";
     comm += display_noX;
     comm += " . ";
     comm += key;
-    comm +="\n"; 
     std::cerr << comm << std::endl;
-    system(comm.c_str());
+    std::cerr << "adding in key \n";
+    e = system(comm.c_str());
+    
+    if (e) {
+        std::cerr << "xauth add error " << e << " " << strerror(e) << "\n"; 
+    }
+    
+    std::string ndisp = host + ".ucar.edu:" + display_noX;
+    setenv("NDISPLAY",ndisp.c_str(),0);
     return EXIT_SUCCESS;
 }
