@@ -46,12 +46,12 @@ int main()
         std::cerr << "none display variable defined!\n";
         exit(EXIT_FAILURE); 
     }
-    
-//    std::cerr << "display name = " << display_name << std::endl;
+
+#ifdef _NDEBUG_        
+    std::cerr << "display name = " << display_name << std::endl;
+#endif
     
     size_t colon_place = display_name.find(":");
-    
-//    std::cerr << "colon place = " << colon_place << std::endl;
     
     if (colon_place==0 || colon_place==std::string::npos) {
         std::cerr << "invalid display name " << display_name << std::endl;
@@ -64,9 +64,11 @@ int main()
         
     std::string display_no = display_name.substr(colon_place+1,std::string::npos);    
     std::string display_noX = display_no.substr(0,display_no.find("."));
-        
-//    std::cerr << "host = " << host << "\n";
-//    std::cerr << "display number = " << display_no << " " << display_noX << "\n";
+
+#ifdef _NDEBUG_        
+    std::cerr << "host = " << host << "\n";
+    std::cerr << "display number = " << display_no << " " << display_noX << "\n";
+#endif
     
     // get xauth list //
     
@@ -86,14 +88,14 @@ int main()
         free(ln);
         ln_len=0;
     }
+#ifdef _NDEBUG_            
     std::cerr << buffer_str <<  std::endl;
+#endif
     int e;
     if (e=pclose(fptr)) {
         std::cerr<< "error " << e << " closing stream \n";
         exit(EXIT_FAILURE);
     }
-    
-///    std::cerr << buffer_str << "\n";
     
     std::vector<std::string> list;
     
@@ -111,15 +113,19 @@ int main()
         }
         ++iter;
     }
+#ifdef _NDEBUG_        
     std::cerr << "key = " << key << std::endl;
+#endif
     std::string comm = "xauth add ";
     comm += host;
     comm += ".ucar.edu:";
     comm += display_noX;
     comm += " . ";
-    comm += key;
+    comm += key;    
+#ifdef _NDEBUG_        
     std::cerr << comm << std::endl;
     std::cerr << "adding in key \n";
+#endif    
     e = system(comm.c_str());
     
     if (e) {
