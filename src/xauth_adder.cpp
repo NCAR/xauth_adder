@@ -72,7 +72,10 @@ int main()
     
     // get xauth list //
     
-    fptr=popen("xauth list","r");
+    std::string cmd_xlist = "xauth list " + display_name;
+    std::cerr << cmd_xlist << "\n";
+
+    fptr=popen(cmd_xlist.c_str(),"r");
     if (ferror(fptr) || fptr==NULL) {
         std::cerr<< "could not launch xauth\n";
         exit(EXIT_FAILURE);
